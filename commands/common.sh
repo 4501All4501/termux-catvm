@@ -19,14 +19,14 @@ STATE
 }
 
 catvm_persist_state() {
-  cat > "${CATVM_STATE_FILE}" <<STATE
-CATVM_POWER=${CATVM_POWER}
-CATVM_CPU=${CATVM_CPU}
-CATVM_SOUNDCARD=${CATVM_SOUNDCARD}
-CATVM_BIOS=${CATVM_BIOS}
-CATVM_BOOT_COUNT=${CATVM_BOOT_COUNT}
-CATVM_ISO=${CATVM_ISO}
-STATE
+  {
+    printf 'CATVM_POWER=%q\n' "${CATVM_POWER}"
+    printf 'CATVM_CPU=%q\n' "${CATVM_CPU}"
+    printf 'CATVM_SOUNDCARD=%q\n' "${CATVM_SOUNDCARD}"
+    printf 'CATVM_BIOS=%q\n' "${CATVM_BIOS}"
+    printf 'CATVM_BOOT_COUNT=%q\n' "${CATVM_BOOT_COUNT}"
+    printf 'CATVM_ISO=%q\n' "${CATVM_ISO}"
+  } > "${CATVM_STATE_FILE}"
 }
 
 catvm_require_zero_args() {
@@ -42,7 +42,7 @@ catvm_require_one_arg() {
   local cmd="$1"
   shift
   if (($# != 1)); then
-    printf 'Usage: %s <name>\n' "${cmd}" >&2
+    printf 'Usage: %s <arg>\n' "${cmd}" >&2
     return 64
   fi
 }
