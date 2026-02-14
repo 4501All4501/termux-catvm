@@ -12,7 +12,9 @@ catvm command reference:
   bios <name>          Set BIOS profile name
   save <name>          Save runtime state snapshot
   load <name>          Load runtime state snapshot
-  status               Show current VM state
+  load-from-file <path> Load/attach an ISO file by path
+  load-from-folder <dir> Load first ISO (*.iso) from folder
+  status               Show current VM state (including loaded ISO)
   help                 Show this help text
   quit | exit          Exit interactive mode
 HELP

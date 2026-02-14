@@ -8,11 +8,14 @@ CATVM_CPU=generic-x86_64
 CATVM_SOUNDCARD=ac97
 CATVM_BIOS=default
 CATVM_BOOT_COUNT=1
+CATVM_ISO=none
 STATE
   fi
 
   # shellcheck disable=SC1090
   source "${CATVM_STATE_FILE}"
+
+  : "${CATVM_ISO:=none}"
 }
 
 catvm_persist_state() {
@@ -22,6 +25,7 @@ CATVM_CPU=${CATVM_CPU}
 CATVM_SOUNDCARD=${CATVM_SOUNDCARD}
 CATVM_BIOS=${CATVM_BIOS}
 CATVM_BOOT_COUNT=${CATVM_BOOT_COUNT}
+CATVM_ISO=${CATVM_ISO}
 STATE
 }
 

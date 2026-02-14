@@ -25,6 +25,7 @@ cmd_load() {
   cp "${save_file}" "${CATVM_STATE_FILE}"
   # shellcheck disable=SC1090
   source "${CATVM_STATE_FILE}"
+  : "${CATVM_ISO:=none}"
   printf 'State loaded from %s.\n' "${save_file}"
 }
 
@@ -35,4 +36,44 @@ cmd_status() {
   printf 'soundcard=%s\n' "${CATVM_SOUNDCARD}"
   printf 'bios=%s\n' "${CATVM_BIOS}"
   printf 'boot_count=%s\n' "${CATVM_BOOT_COUNT}"
+  printf 'iso=%s\n' "${CATVM_ISO}"
+}
+
+cmd_load_from_file() {
+  catvm_require_one_arg "load-from-file" "$@" || return $?
+  local iso_file="$1"
+
+  if [[ ! -f "${iso_file}" ]]; then
+    printf 'ISO file not found: %s\n' "${iso_file}" >&2
+    return 66
+  fi
+
+  if [[ ! "${iso_file}" =~ \.([iI][sS][oO])$ ]]; then
+    printf 'Invalid file type for load-from-file: %s (expected .iso)\n' "${iso_file}" >&2
+    return 65
+  fi
+
+  CATVM_ISO="${iso_file}"
+  catvm_persist_state
+  printf 'ISO loaded from file: %s.\n' "${iso_file}"
+}
+
+cmd_load_from_folder() {
+  catvm_require_one_arg "load-from-folder" "$@" || return $?
+  local folder="$1"
+
+  if [[ ! -d "${folder}" ]]; then
+    printf 'Folder not found: %s\n' "${folder}" >&2
+    return 66
+  fi
+
+  local iso_file=""
+  iso_file="$(find "${folder}" -maxdepth 1 -type f \( -name '*.iso' -o -name '*.ISO' \) | LC_ALL=C sort | head -n 1)"
+
+  if [[ -z "${iso_file}" ]]; then
+    printf 'No ISO file found in folder: %s\n' "${folder}" >&2
+    return 66
+  fi
+
+  cmd_load_from_file "${iso_file}"
 }
