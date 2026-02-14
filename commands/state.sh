@@ -80,7 +80,7 @@ cmd_load_from_folder() {
   elif [[ -f "${folder}/CATVM.ISO" ]]; then
     iso_file="${folder}/CATVM.ISO"
   else
-    iso_file="$(find "${folder}" -maxdepth 1 -type f \( -name '*.iso' -o -name '*.ISO' \) | LC_ALL=C sort | head -n 1)"
+    iso_file="$(find "${folder}" -maxdepth 1 -type f -iname '*.iso' | LC_ALL=C sort | head -n 1)"
   fi
 
   if [[ -z "${iso_file}" ]]; then
