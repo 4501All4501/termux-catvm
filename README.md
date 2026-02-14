@@ -59,3 +59,7 @@ Quick check:
 ```bash
 ./scripts/check-conflicts.sh
 ```
+
+ISO load commands store an absolute ISO path in VM state for consistent behavior across working directories.
+
+When loading from folder, `catvm.iso`/`CATVM.ISO` is preferred; otherwise CatVM picks the first sorted `*.iso` file.

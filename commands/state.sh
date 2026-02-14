@@ -53,9 +53,15 @@ cmd_load_from_file() {
     return 65
   fi
 
-  CATVM_ISO="${iso_file}"
+  local iso_abs_path=""
+  iso_abs_path="$(catvm_abs_path "${iso_file}")" || {
+    printf 'Failed to resolve ISO path: %s\n' "${iso_file}" >&2
+    return 70
+  }
+
+  CATVM_ISO="${iso_abs_path}"
   catvm_persist_state
-  printf 'ISO loaded from file: %s.\n' "${iso_file}"
+  printf 'ISO loaded from file: %s.\n' "${iso_abs_path}"
 }
 
 cmd_load_from_folder() {
@@ -68,7 +74,14 @@ cmd_load_from_folder() {
   fi
 
   local iso_file=""
-  iso_file="$(find "${folder}" -maxdepth 1 -type f \( -name '*.iso' -o -name '*.ISO' \) | LC_ALL=C sort | head -n 1)"
+
+  if [[ -f "${folder}/catvm.iso" ]]; then
+    iso_file="${folder}/catvm.iso"
+  elif [[ -f "${folder}/CATVM.ISO" ]]; then
+    iso_file="${folder}/CATVM.ISO"
+  else
+    iso_file="$(find "${folder}" -maxdepth 1 -type f \( -name '*.iso' -o -name '*.ISO' \) | LC_ALL=C sort | head -n 1)"
+  fi
 
   if [[ -z "${iso_file}" ]]; then
     printf 'No ISO file found in folder: %s\n' "${folder}" >&2

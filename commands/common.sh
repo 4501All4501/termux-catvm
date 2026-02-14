@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+catvm_abs_path() {
+  local input_path="$1"
+  local dir base
+
+  dir="$(cd "$(dirname "${input_path}")" && pwd -P)" || return 1
+  base="$(basename "${input_path}")"
+  printf '%s/%s\n' "${dir}" "${base}"
+}
+
 catvm_init_state() {
   if [[ ! -f "${CATVM_STATE_FILE}" ]]; then
     cat > "${CATVM_STATE_FILE}" <<STATE
