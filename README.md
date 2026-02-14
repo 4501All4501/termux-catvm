@@ -44,3 +44,18 @@ Run without arguments for interactive mode:
 - `help`
 
 `load-from-file` and `load-from-folder` are for ISO media loading (not state snapshot loading).
+
+## Merge conflict quick-fix
+
+If you ever see conflict markers like `<<<<<<<`, `=======`, `>>>>>>>`, keep the ISO-based command variants:
+
+```text
+load-from-file <path>  Load/attach an ISO file by path
+load-from-folder <dir> Load first ISO (*.iso) from folder
+```
+
+Quick check:
+
+```bash
+./scripts/check-conflicts.sh
+```
