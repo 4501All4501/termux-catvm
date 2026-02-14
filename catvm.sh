@@ -53,6 +53,12 @@ catvm_parse_and_execute() {
     load)
       cmd_load "$@"
       ;;
+    load-from-file)
+      cmd_load_from_file "$@"
+      ;;
+    load-from-folder)
+      cmd_load_from_folder "$@"
+      ;;
     status)
       cmd_status "$@"
       ;;

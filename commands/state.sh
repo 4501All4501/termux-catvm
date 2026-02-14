@@ -36,3 +36,43 @@ cmd_status() {
   printf 'bios=%s\n' "${CATVM_BIOS}"
   printf 'boot_count=%s\n' "${CATVM_BOOT_COUNT}"
 }
+
+cmd_load_from_file() {
+  catvm_require_one_arg "load-from-file" "$@" || return $?
+  local state_file="$1"
+
+  if [[ ! -f "${state_file}" ]]; then
+    printf 'State file not found: %s\n' "${state_file}" >&2
+    return 66
+  fi
+
+  cp "${state_file}" "${CATVM_STATE_FILE}"
+  # shellcheck disable=SC1090
+  source "${CATVM_STATE_FILE}"
+  printf 'State loaded from file: %s.\n' "${state_file}"
+}
+
+cmd_load_from_folder() {
+  catvm_require_one_arg "load-from-folder" "$@" || return $?
+  local folder="$1"
+
+  if [[ ! -d "${folder}" ]]; then
+    printf 'Folder not found: %s\n' "${folder}" >&2
+    return 66
+  fi
+
+  local state_file=""
+
+  if [[ -f "${folder}/catvm.state" ]]; then
+    state_file="${folder}/catvm.state"
+  else
+    state_file="$(find "${folder}" -maxdepth 1 -type f -name '*.state' | LC_ALL=C sort | head -n 1)"
+  fi
+
+  if [[ -z "${state_file}" ]]; then
+    printf 'No state file found in folder: %s\n' "${folder}" >&2
+    return 66
+  fi
+
+  cmd_load_from_file "${state_file}"
+}
