@@ -16,6 +16,8 @@ Minimal shell runtime for CatVM command parsing and state management.
 ./catvm.sh save baseline
 ./catvm.sh reboot
 ./catvm.sh shutdown
+./catvm.sh load-from-file ./runtime/saves/baseline.state
+./catvm.sh load-from-folder ./runtime/saves
 ./catvm-change-bios uefi
 ```
 
@@ -36,5 +38,7 @@ Run without arguments for interactive mode:
 - `bios <name>`
 - `save <name>`
 - `load <name>`
+- `load-from-file <path>`
+- `load-from-folder <dir>`
 - `status`
 - `help`

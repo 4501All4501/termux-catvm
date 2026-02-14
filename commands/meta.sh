@@ -12,6 +12,8 @@ catvm command reference:
   bios <name>          Set BIOS profile name
   save <name>          Save runtime state snapshot
   load <name>          Load runtime state snapshot
+  load-from-file <path> Load VM state directly from a state file
+  load-from-folder <dir> Load VM state from catvm.state or first *.state in a folder
   status               Show current VM state
   help                 Show this help text
   quit | exit          Exit interactive mode
